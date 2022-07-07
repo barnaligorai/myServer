@@ -9,6 +9,7 @@ const mimeTypes = {
   '.png': 'image/png',
   '.pdf': 'application/pdf',
   '.gif': 'image/gif',
+  '.json': 'application/json',
 };
 
 const mimeType = (fileName) => {
@@ -22,12 +23,14 @@ const setContentTypeHeader = (response, fileName) =>
 const setStatusCode = (response, code) =>
   response.statusCode = code;
 
-const fileHandler = (sourceDir) => (request, response, next) => {
+const fileHandler = (sourceDir = './public') => (request, response, next) => {
   const { pathname } = request.url;
   let fileName = sourceDir + pathname;
+
   if (pathname === '/') {
     fileName = fileName + 'index.html';
   }
+
   try {
     const content = fs.readFileSync(fileName);
     setContentTypeHeader(response, fileName);
